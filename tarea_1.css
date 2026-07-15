@@ -29,11 +29,26 @@
 }
     */
 .caja{
+    display: grid;
+    /*grid-template-rows: 1fr 1fr 1fr;*/
     overflow-wrap: break-word;
     word-break: break-word;
     display: flex;
-    justify-content: center;
-    text-align: justify;
+    /*justify-content: center;*/
+    /*text-align: justify;*/
+    gap: 10px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+    background-color: #a7e5f1;
+}
+.a{
+   overflow-wrap: break-word;
+    word-break: break-word;
+    display: flex;
+    /*justify-content: center;*/
+    /*text-align: justify;*/
     gap: 10px;
     border: 1px solid #333;
     border-radius: 10px;
@@ -45,9 +60,12 @@
 .eliminar{
     margin-left: auto;
 }
+.editar{
+    margin-left: auto;
+}
 .item{
-    max-width: 200px;
-    margin-left:0%;
+    max-width: 100%;
+    width: 70%;
     text-align: justify;
 }
 .caja1{
@@ -61,6 +79,21 @@
     background-color: #12dd2a;
 }
 
-
+.fechaa{
+    display: flex;
+    margin-left: auto;
+   /*justify-content: center;*/
+   text-align: center; 
+   padding: 10px;
+}
+.botones{
+     /*display: flex;*/
+     margin-left: auto;
+    justify-content: flex-end; /* Envía los botones a la derecha */
+    gap: 10px;
+}
+p{
+    font-size: 10px;
+}
 
 

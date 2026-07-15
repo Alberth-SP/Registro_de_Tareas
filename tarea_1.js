@@ -7,22 +7,24 @@ $(document).ready(function(){
 
     $("#agregar").click(function(){ 
         var  ideRecup = $("#hidText").val();
-        console.log("uuuuuuuuuuuuu");
-        console.log(ideRecup);
-        console.log("uuuuuuuuuuuu");
+        
         let mensaje = $("#text_agre").val();
         if( ideRecup == "" ){
             const ide = crypto.randomUUID();
-            const tarea1 = {'id':ide, 'texto':mensaje};
+            const tarea1 = {'id':ide, 'texto':mensaje, 'fecha':new Date().toLocaleString()};
             arreglo.push(tarea1);
             $("#items").append(`
                     <div class="caja" id="caja${ide || 0}">
                         <div class="item" id="text${ide || 0}">
-                        ${tarea1.texto}
+                            <p>Creacion: ${tarea1.fecha}</p>
+                            <h4>${tarea1.texto}</h4>
                         </div>  
-                        <button class="eliminar" data-id="${ide || 0}" data-post="${mensaje}">Eliminar</button>
-                        <button class="editar" data-id="${ide}">Editar</button>
+                        <div class="botones">
+                            <button class="eliminar" data-id="${ide || 0}" data-post="${mensaje}">Eliminar</button>
+                            <button class="editar" data-id="${ide}">Editar</button>
+                        </div>
                     </div>
+                
                     `);
             $("#text_agre").val(" ");
             ideRecup = null;
@@ -64,11 +66,15 @@ $(document).ready(function(){
                 var men = arreglo[i];
                 $("#items").append(`
                     <div class="caja" id="caja${men.id}">
-                    <div class="item" id="text${men.id}">
-                        ${men.texto}
-                    </div>  <button class="eliminar" data-id="${men.id}">Eliminar</button>
+                        <div class="item" id="text${men.id}">
+                                <p>Creacion: ${men.fecha}</p>
+                                <h4>${men.texto}</h4>    
+                        </div>
+                        <div class="botones">  
+                            <button class="eliminar" data-id="${men.id}">Eliminar</button>
                             <button class="editar" data-id="${men.id}">Editar</button>
-                    </div>
+                        </div>
+                    </div>   
                 `);
             }
     }
