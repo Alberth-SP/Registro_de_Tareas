@@ -6,18 +6,23 @@ let arreglo = [];
 $(document).ready(function(){
 
     $("#agregar").click(function(){ 
+
         var  ideRecup = $("#hidText").val();
-        
+        var prioridad = $("#prioridad").val();
         let mensaje = $("#text_agre").val();
+        let prioClass = "prioridad_"+ prioridad.toLowerCase();
+
         if( ideRecup == "" ){
+            console.log("1111111111111111111111");
             const ide = crypto.randomUUID();
-            const tarea1 = {'id':ide, 'texto':mensaje, 'fecha':new Date().toLocaleString()};
+            const tarea1 = {'id':ide, 'texto':mensaje, 'fecha':new Date().toLocaleString(), 'prioridad':prioridad};
             arreglo.push(tarea1);
             $("#items").append(`
                     <div class="caja" id="caja${ide || 0}">
                         <div class="item" id="text${ide || 0}">
-                            <p>Creacion: ${tarea1.fecha}</p>
-                            <h4>${tarea1.texto}</h4>
+                            <p class="fech">Creacion: ${tarea1.fecha}</p>
+                            <h4 class="tex">${tarea1.texto}</h4>
+                            <h4 class="prio ${prioClass}">${tarea1.prioridad}</h4>
                         </div>  
                         <div class="botones">
                             <button class="eliminar" data-id="${ide || 0}" data-post="${mensaje}">Eliminar</button>
@@ -32,52 +37,54 @@ $(document).ready(function(){
             
         }
         else if ( ideRecup != "" ){
+            console.log("222222222222222222222");
             console.log("ideRecup");
             console.log(ideRecup);
             ides = ideRecup; 
+            prioridads = $("#prioridad").val();
             mensajes = $("#text_agre").val();
-            $("#text"+ides).text(mensajes);
+            fechas = new Date().toLocaleString();
+            console.log(prioridads);
+            console.log(mensajes);
+            console.log(fechas);
+            //$("#text"+ides).text(mensajes);
+            $("#text"+ides+" .fech").text("Creacion: "+ fechas);
+            $("#text"+ides+" .tex").text(mensajes);
+            $("#text"+ides+" .prio").text(prioridads);
+
 
             let indice = arreglo.findIndex(p => p.id === ides);
+            console.log(arreglo);
             if (indice !== -1) {
                 arreglo[indice] = {
                     id: ides,
-                    texto: mensajes
+                    texto: mensajes,
+                    fecha: fechas,
+                    prioridad: prioridads
                 };
             }
+        
             $("#text_agre").val(" ");
             localStorage.setItem("mensajeArr", JSON.stringify(arreglo));
-            console.log(mensajes);
+            //console.log(mensajes);
             //ideRecup = null;
+            //refrescar();
             $("#hidText").val("");
             
             $("#agregar").text("Agregar Tarea");
             $("#caja" + ides).css("background-color", "#a7e5f1");
             $(".editar").prop("disabled", false);
             $(".eliminar").prop("disabled", false);
+            
+
         }
        
     });
 
+   
     arreglo = JSON.parse(localStorage.getItem("mensajeArr")) || [];
     
-    if(arreglo != null){
-            for(i=0; i < arreglo.length; i++){
-                var men = arreglo[i];
-                $("#items").append(`
-                    <div class="caja" id="caja${men.id}">
-                        <div class="item" id="text${men.id}">
-                                <p>Creacion: ${men.fecha}</p>
-                                <h4>${men.texto}</h4>    
-                        </div>
-                        <div class="botones">  
-                            <button class="eliminar" data-id="${men.id}">Eliminar</button>
-                            <button class="editar" data-id="${men.id}">Editar</button>
-                        </div>
-                    </div>   
-                `);
-            }
-    }
+    
 
     var ideRecup = $("#hidText").val(); //recupero id
     if(ideRecup != ""){
@@ -110,6 +117,8 @@ $(document).ready(function(){
             var men = arreglo[i];
             if(men.id == ides){
                 $("#text_agre").val(men.texto);
+                $("#prioridad").val(men.prioridad);
+
             }          
         }
         $(".editar").prop("disabled", true);
@@ -117,7 +126,33 @@ $(document).ready(function(){
         
     });
 
+    refrescar();
+    
+
 });
+
+function refrescar(){
+    
+    if(arreglo != null){
+            for(i=0; i < arreglo.length; i++){
+                var men = arreglo[i];
+                let prioClass = "prioridad_"+ men.prioridad.toLowerCase();
+                $("#items").append(`
+                    <div class="caja" id="caja${men.id}">
+                        <div class="item" id="text${men.id}">
+                                <p class="fech">Creacion: ${men.fecha}</p>
+                                <h4 class="tex">${men.texto}</h4> 
+                                <h4 class="prio ${prioClass}">${men.prioridad}</h4>   
+                        </div>
+                        <div class="botones">  
+                            <button class="eliminar" data-id="${men.id}">Eliminar</button>
+                            <button class="editar" data-id="${men.id}">Editar</button>
+                        </div>
+                    </div>   
+                `);
+            }
+    }
+}
 
 
 

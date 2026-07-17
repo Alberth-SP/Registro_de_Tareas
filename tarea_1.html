@@ -19,10 +19,20 @@
 </head>
 <body>
     <div id="contenedor">
+       
         <div id="titulo">
             <h1>Listado de Tareas</h1>
         </div>
         <div id="entrada_texto">
+            <label for="prioridad">Prioridad:</label>
+
+            <select id="prioridad" name="prioridad">
+                <option value="Baja">-- Opciones --</option>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+            </select>
+
             <input type="text" id="text_agre"> 
             <input type="hidden" id="hidText" value="">
             <button id="agregar" class="control">Agregar Tarea</button>

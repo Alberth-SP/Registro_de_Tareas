@@ -95,5 +95,14 @@
 p{
     font-size: 10px;
 }
+.prioridad_baja{
+    color: green;
+}
+.prioridad_media{
+    color: rgb(235, 156, 52);
+}
+.prioridad_alta{
+    color: rgb(233, 31, 51);
+}
 
 
