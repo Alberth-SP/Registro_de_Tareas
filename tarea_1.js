@@ -22,7 +22,11 @@ $(document).ready(function(){
                         <div class="item" id="text${ide || 0}">
                             <p class="fech">Creacion: ${tarea1.fecha}</p>
                             <h4 class="tex">${tarea1.texto}</h4>
-                            <h4 class="prio ${prioClass}">${tarea1.prioridad}</h4>
+                            
+                            <h4>
+                                <span style="color: black;">Prioridad:</span>
+                                <span class="prio ${prioClass}">${tarea1.prioridad}</span>
+                            </h4>
                         </div>  
                         <div class="botones">
                             <button class="eliminar" data-id="${ide || 0}" data-post="${mensaje}">Eliminar</button>
@@ -142,7 +146,11 @@ function refrescar(){
                         <div class="item" id="text${men.id}">
                                 <p class="fech">Creacion: ${men.fecha}</p>
                                 <h4 class="tex">${men.texto}</h4> 
-                                <h4 class="prio ${prioClass}">${men.prioridad}</h4>   
+                                <h4 
+                                    <span style="color: black;">Prioridad:</span>
+                                    <span class="prio ${prioClass}">${men.prioridad}</span>
+                                
+                                </h4>   
                         </div>
                         <div class="botones">  
                             <button class="eliminar" data-id="${men.id}">Eliminar</button>
