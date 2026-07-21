@@ -49,7 +49,6 @@ $(document).ready(function(){
             
         }
         else if ( ideRecup != "" ){
-            console.log("222222222222222222222");
             console.log("ideRecup");
             console.log(ideRecup);
             ides = ideRecup; 
@@ -57,10 +56,6 @@ $(document).ready(function(){
             actividads = $("#actividad").val();
             mensajes = $("#text_agre").val();
             fechas = new Date().toLocaleString();
-            console.log(prioridads);
-            console.log(mensajes);
-            console.log(fechas);
-            //$("#text"+ides).text(mensajes);
             $("#text"+ides+" .fech").text("Creacion: "+ fechas);
             $("#text"+ides+" .tex").text(mensajes);
             $("#text"+ides+" .prio").text(prioridads);
@@ -81,11 +76,7 @@ $(document).ready(function(){
         
             $("#text_agre").val(" ");
             localStorage.setItem("mensajeArr", JSON.stringify(arreglo));
-            //console.log(mensajes);
-            //ideRecup = null;
-            //refrescar();
             $("#hidText").val("");
-            
             $("#agregar").text("Agregar Tarea");
             $("#caja" + ides).css("background-color", "#a7e5f1");
             $(".editar").prop("disabled", false);
