@@ -153,11 +153,11 @@ function refrescar(){
                                 
                             <div class="cont">
                                 <div class="cajita">
-                                    <span style="color: black;">Tipo de Actividad:</span>
+                                    <span style="color: black">Tipo de Actividad:</span>
                                     <span class="activ ${activClass}">${men.actividad}</span>
                                 </div>
                                 <div class="cajita">
-                                    <span style="activ: black;">Prioridad:</span>
+                                    <span style="color: black">Prioridad:</span>
                                     <span class="prio ${prioClass}">${men.prioridad}</span>
                                 </div>
                             </div>
