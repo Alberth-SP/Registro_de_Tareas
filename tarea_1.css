@@ -3,6 +3,8 @@
 #entrada_texto{
     display: flex;
     justify-content: center;
+    font-size: 15px;
+    font-family: cursive;
     gap: 10px;
 }
 
@@ -11,7 +13,7 @@
 }
 
 #contenedor{
-    width: 600px;
+    width: 800px;
     margin: 40px auto;
 }
 
@@ -105,4 +107,20 @@ p{
     color: rgb(233, 31, 51);
 }
 
+.tex{
+    height: auto;
+    background-color: rgb(248, 250, 250);
+    padding: 8px;
+    border-radius: 10px;
+    border-color: black;
+}
+.cont{
+    height: 40px;
+    display: flex;
+    gap: 20px;
+}
+.cajita{
+    width: 50%;
+    padding: 20px;
+}
 
