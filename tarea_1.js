@@ -9,13 +9,15 @@ $(document).ready(function(){
 
         var  ideRecup = $("#hidText").val();
         var prioridad = $("#prioridad").val();
+        var actividad = $("#actividad").val();
         let mensaje = $("#text_agre").val();
         let prioClass = "prioridad_"+ prioridad.toLowerCase();
+        let activClass = "actividad_"+ actividad.toLowerCase();
 
         if( ideRecup == "" ){
             console.log("1111111111111111111111");
             const ide = crypto.randomUUID();
-            const tarea1 = {'id':ide, 'texto':mensaje, 'fecha':new Date().toLocaleString(), 'prioridad':prioridad};
+            const tarea1 = {'id':ide, 'texto':mensaje, 'fecha':new Date().toLocaleString(), 'prioridad':prioridad, 'actividad':actividad};
             arreglo.push(tarea1);
             $("#items").append(`
                     <div class="caja" id="caja${ide || 0}">
@@ -23,10 +25,16 @@ $(document).ready(function(){
                             <p class="fech">Creacion: ${tarea1.fecha}</p>
                             <h4 class="tex">${tarea1.texto}</h4>
                             
-                            <h4>
-                                <span style="color: black;">Prioridad:</span>
-                                <span class="prio ${prioClass}">${tarea1.prioridad}</span>
-                            </h4>
+                            <div class="cont">
+                                <div class="cajita">
+                                    <span style="color: black;">Tipo de Actividad:</span>
+                                    <span class="activ ${activClass}">${tarea1.actividad}</span>
+                                </div>
+                                <div class="cajita">
+                                    <span style="activ: black;">Prioridad:</span>
+                                    <span class="prio ${prioClass}">${tarea1.prioridad}</span>
+                                </div>
+                            </div>
                         </div>  
                         <div class="botones">
                             <button class="eliminar" data-id="${ide || 0}" data-post="${mensaje}">Eliminar</button>
@@ -46,6 +54,7 @@ $(document).ready(function(){
             console.log(ideRecup);
             ides = ideRecup; 
             prioridads = $("#prioridad").val();
+            actividads = $("#actividad").val();
             mensajes = $("#text_agre").val();
             fechas = new Date().toLocaleString();
             console.log(prioridads);
@@ -55,6 +64,7 @@ $(document).ready(function(){
             $("#text"+ides+" .fech").text("Creacion: "+ fechas);
             $("#text"+ides+" .tex").text(mensajes);
             $("#text"+ides+" .prio").text(prioridads);
+            $("#text"+ides+" .activ").text(actividads);
 
 
             let indice = arreglo.findIndex(p => p.id === ides);
@@ -64,7 +74,8 @@ $(document).ready(function(){
                     id: ides,
                     texto: mensajes,
                     fecha: fechas,
-                    prioridad: prioridads
+                    prioridad: prioridads,
+                    actividad: actividads
                 };
             }
         
@@ -122,6 +133,7 @@ $(document).ready(function(){
             if(men.id == ides){
                 $("#text_agre").val(men.texto);
                 $("#prioridad").val(men.prioridad);
+                $("#actividad").val(men.actividad);
 
             }          
         }
@@ -141,16 +153,24 @@ function refrescar(){
             for(i=0; i < arreglo.length; i++){
                 var men = arreglo[i];
                 let prioClass = "prioridad_"+ men.prioridad.toLowerCase();
+                let activClass = "actividad_"+ men.actividad.toLowerCase();
                 $("#items").append(`
                     <div class="caja" id="caja${men.id}">
                         <div class="item" id="text${men.id}">
                                 <p class="fech">Creacion: ${men.fecha}</p>
                                 <h4 class="tex">${men.texto}</h4> 
-                                <h4 
-                                    <span style="color: black;">Prioridad:</span>
-                                    <span class="prio ${prioClass}">${men.prioridad}</span>
                                 
-                                </h4>   
+                            <div class="cont">
+                                <div class="cajita">
+                                    <span style="color: black;">Tipo de Actividad:</span>
+                                    <span class="activ ${activClass}">${men.actividad}</span>
+                                </div>
+                                <div class="cajita">
+                                    <span style="activ: black;">Prioridad:</span>
+                                    <span class="prio ${prioClass}">${men.prioridad}</span>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="botones">  
                             <button class="eliminar" data-id="${men.id}">Eliminar</button>
