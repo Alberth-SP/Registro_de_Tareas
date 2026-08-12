@@ -1,66 +1,57 @@
 
 let arreglo = [];
 let arreglo_json = [];
-//var ideRecup = null;
+var ideRecup = "";
 
 $(document).ready(function(){
 
     cargar_tipos();
-
-    $("#agregar").click(function(){ 
-        console.log("zzzzzzzzzzzzzzz");
-        console.log(ideRecup);
-        console.log("zzzzzzzzzzzzzzzzzz");
-        
+    ideRecup = $("#hidText").val();
+    console.log("bbbbbbbbbbb");
+    console.log(ideRecup);
+    console.log("bbbbbbbbbbb");
+    //ideRecup = null; //recupero id
+    
+    $("#agregar").click(function(){  
         if( ideRecup == "" ){
-            
+            console.log("55555555555555555");
+            console.log(ideRecup);
+            console.log("555555555555555555");
             post_agregar();
             $("#text_agre").val(" ");
-            ideRecup = null;
             localStorage.setItem("mensajeArr", JSON.stringify(arreglo_json));
-            
+            console.log("-----------------------");
+            console.log(ideRecup);
+            console.log("-----------------------");
         }
         
         else if ( ideRecup != "" ){
-
-            ides = ideRecup;
-            actualizar_tarea(ides);
-            refrescar();
-             
-        
-            let indice = arreglo_json.findIndex(p => p.id === ides);
-            console.log(arreglo_json);
-            if (indice !== -1) {
-                arreglo_json[indice] = {
-                    id: ides,
-                    description: mensajes,
-                    fecha_creacion: fechas,
-                    prioridad: prioridads,
-                    actividad: actividads
-                };
-            }
-
-        
-        
+            console.log("44444444444444444444");
+            console.log(ideRecup);
+            console.log("44444444444444444444");
+            actualizar_tarea(ideRecup);
+            
+            var id = ideRecup;
             $("#text_agre").val(" ");
             localStorage.setItem("mensajeArr", JSON.stringify(arreglo_json));
             $("#hidText").val("");
             $("#agregar").text("Agregar Tarea");
-            $("#caja" + ides).css("background-color", "#a7e5f1");
+            $("#caja" + id).css("background-color", "#a7e5f1");
             $(".editar").prop("disabled", false);
             $(".eliminar").prop("disabled", false);
-            
-
+            ideRecup = "";
+ 
         }
-            
-       
+        refrescar();
+   
     });
 
    
     arreglo = JSON.parse(localStorage.getItem("mensajeArr")) || [];
-    var ideRecup = $("#hidText").val(); //recupero id
+    
 
     if(ideRecup != ""){
+        
         $("#caja" + ideRecup).css("background-color", "#ffff99");
         $(".editar").prop("disabled", true);
         $(".eliminar").prop("disabled", true);
@@ -82,11 +73,12 @@ $(document).ready(function(){
         
         $("#agregar").text("Actualizar");
         var ides = $(this).data("id");
-        
+        console.log("22222222222222222222222");
+        console.log(ides);
+        console.log("22222222222222222222222");
         $("#hidText").val(ides);
-        var ideRecup = $("#hidText").val(); //recupero id
+        ideRecup = $("#hidText").val(); //recupero id
         
-
         $("#caja" + ideRecup).css("background-color", "#ffff99");
         for(i=0; i < arreglo_json.length; i++){
             var men = arreglo_json[i];
@@ -108,13 +100,11 @@ $(document).ready(function(){
 });
 
 function refrescar(){
-    
+    $("#items").empty();
     if(arreglo_json != null){
-            
             for(i=0; i < arreglo_json.length; i++){
                 var men = arreglo_json[i];
                 let prioClass = "prioridad_"+ men.prioridad.toLowerCase();
-                //let activClass = "actividad_"+ men.foreig_id.toLowerCase();
                 $("#items").append(`
                     <div class="caja" id="caja${men.id}">
                         <div class="item" id="text${men.id}">
@@ -231,9 +221,13 @@ function actualizar_tarea(id){
         contentType: "application/json",
         data: JSON.stringify(tarea),
         success: function(datos){ // Se ejecuta cuando la peticion sea exitosa
+            var idess = datos.id; // datos es el objeto actualizado
         
-            arreglo_json.push(datos);
+            let indice = arreglo_json.findIndex(p => p.id === idess);
             console.log(arreglo_json);
+            if (indice !== -1) {
+                arreglo_json[indice] = datos;
+            }
             refrescar();
         }
 
