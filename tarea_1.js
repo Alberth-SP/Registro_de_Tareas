@@ -1,81 +1,49 @@
 
 let arreglo = [];
+let arreglo_json = [];
 //var ideRecup = null;
-
 
 $(document).ready(function(){
 
+    cargar_tipos();
+
     $("#agregar").click(function(){ 
-
-        var  ideRecup = $("#hidText").val();
-        var prioridad = $("#prioridad").val();
-        var actividad = $("#actividad").val();
-        let mensaje = $("#text_agre").val();
-        let prioClass = "prioridad_"+ prioridad.toLowerCase();
-        let activClass = "actividad_"+ actividad.toLowerCase();
-
+        console.log("zzzzzzzzzzzzzzz");
+        console.log(ideRecup);
+        console.log("zzzzzzzzzzzzzzzzzz");
+        
         if( ideRecup == "" ){
-            console.log("1111111111111111111111");
-            const ide = crypto.randomUUID();
-            const tarea1 = {'id':ide, 'texto':mensaje, 'fecha':new Date().toLocaleString(), 'prioridad':prioridad, 'actividad':actividad};
-            arreglo.push(tarea1);
-            $("#items").append(`
-                    <div class="caja" id="caja${ide || 0}">
-                        <div class="item" id="text${ide || 0}">
-                            <p class="fech">Creacion: ${tarea1.fecha}</p>
-                            <h4 class="tex">${tarea1.texto}</h4>
-                            
-                            <div class="cont">
-                                <div class="cajita">
-                                    <span style="color: black;">Tipo de Actividad:</span>
-                                    <span class="activ ${activClass}">${tarea1.actividad}</span>
-                                </div>
-                                <div class="cajita">
-                                    <span style="activ: black;">Prioridad:</span>
-                                    <span class="prio ${prioClass}">${tarea1.prioridad}</span>
-                                </div>
-                            </div>
-                        </div>  
-                        <div class="botones">
-                            <button class="eliminar" data-id="${ide || 0}" data-post="${mensaje}">Eliminar</button>
-                            <button class="editar" data-id="${ide}">Editar</button>
-                        </div>
-                    </div>
-                
-                    `);
+            
+            post_agregar();
             $("#text_agre").val(" ");
             ideRecup = null;
-            localStorage.setItem("mensajeArr", JSON.stringify(arreglo));
+            localStorage.setItem("mensajeArr", JSON.stringify(arreglo_json));
             
         }
+        
         else if ( ideRecup != "" ){
-            console.log("ideRecup");
-            console.log(ideRecup);
-            ides = ideRecup; 
-            prioridads = $("#prioridad").val();
-            actividads = $("#actividad").val();
-            mensajes = $("#text_agre").val();
-            fechas = new Date().toLocaleString();
-            $("#text"+ides+" .fech").text("Creacion: "+ fechas);
-            $("#text"+ides+" .tex").text(mensajes);
-            $("#text"+ides+" .prio").text(prioridads);
-            $("#text"+ides+" .activ").text(actividads);
 
-
-            let indice = arreglo.findIndex(p => p.id === ides);
-            console.log(arreglo);
+            ides = ideRecup;
+            actualizar_tarea(ides);
+            refrescar();
+             
+        
+            let indice = arreglo_json.findIndex(p => p.id === ides);
+            console.log(arreglo_json);
             if (indice !== -1) {
-                arreglo[indice] = {
+                arreglo_json[indice] = {
                     id: ides,
-                    texto: mensajes,
-                    fecha: fechas,
+                    description: mensajes,
+                    fecha_creacion: fechas,
                     prioridad: prioridads,
                     actividad: actividads
                 };
             }
+
+        
         
             $("#text_agre").val(" ");
-            localStorage.setItem("mensajeArr", JSON.stringify(arreglo));
+            localStorage.setItem("mensajeArr", JSON.stringify(arreglo_json));
             $("#hidText").val("");
             $("#agregar").text("Agregar Tarea");
             $("#caja" + ides).css("background-color", "#a7e5f1");
@@ -84,15 +52,14 @@ $(document).ready(function(){
             
 
         }
+            
        
     });
 
    
     arreglo = JSON.parse(localStorage.getItem("mensajeArr")) || [];
-    
-    
-
     var ideRecup = $("#hidText").val(); //recupero id
+
     if(ideRecup != ""){
         $("#caja" + ideRecup).css("background-color", "#ffff99");
         $(".editar").prop("disabled", true);
@@ -115,16 +82,18 @@ $(document).ready(function(){
         
         $("#agregar").text("Actualizar");
         var ides = $(this).data("id");
+        
         $("#hidText").val(ides);
         var ideRecup = $("#hidText").val(); //recupero id
+        
 
         $("#caja" + ideRecup).css("background-color", "#ffff99");
-        for(i=0; i < arreglo.length; i++){
-            var men = arreglo[i];
+        for(i=0; i < arreglo_json.length; i++){
+            var men = arreglo_json[i];
             if(men.id == ides){
-                $("#text_agre").val(men.texto);
+                $("#text_agre").val(men.description);
                 $("#prioridad").val(men.prioridad);
-                $("#actividad").val(men.actividad);
+                $("#actividad").val(men.tipo.id);
 
             }          
         }
@@ -133,28 +102,29 @@ $(document).ready(function(){
         
     });
 
-    refrescar();
+    get_refrescar();
     
 
 });
 
 function refrescar(){
     
-    if(arreglo != null){
-            for(i=0; i < arreglo.length; i++){
-                var men = arreglo[i];
+    if(arreglo_json != null){
+            
+            for(i=0; i < arreglo_json.length; i++){
+                var men = arreglo_json[i];
                 let prioClass = "prioridad_"+ men.prioridad.toLowerCase();
-                let activClass = "actividad_"+ men.actividad.toLowerCase();
+                //let activClass = "actividad_"+ men.foreig_id.toLowerCase();
                 $("#items").append(`
                     <div class="caja" id="caja${men.id}">
                         <div class="item" id="text${men.id}">
-                                <p class="fech">Creacion: ${men.fecha}</p>
-                                <h4 class="tex">${men.texto}</h4> 
+                                <p class="fech">Creacion: ${men.fecha_creacion}</p>
+                                <h4 class="tex">${men.description}</h4> 
                                 
                             <div class="cont">
                                 <div class="cajita">
                                     <span style="color: black">Tipo de Actividad:</span>
-                                    <span class="activ ${activClass}">${men.actividad}</span>
+                                    <span class="">${men.tipo.nombre}</span>
                                 </div>
                                 <div class="cajita">
                                     <span style="color: black">Prioridad:</span>
@@ -173,5 +143,99 @@ function refrescar(){
     }
 }
 
+function get_refrescar(){
+    $.ajax({
 
+    url: "http://127.0.0.1:8000/tarea/",
+    type: "GET",
+    success: function(datos){
+        
+        console.log(datos);
+        datos.forEach(function(tarea){
+            arreglo_json.push(tarea);
+        });
+        refrescar();
+    }
+    
+});
+}
 
+function post_agregar(){
+
+    const tarea = {
+        description: $("#text_agre").val(),
+        foreig_id: Number($("#actividad").val()),
+        prioridad: $("#prioridad").val()
+    };
+  
+    $.ajax({
+
+    url: "http://127.0.0.1:8000/tarea/",
+    type: "POST",
+    data: JSON.stringify(tarea),
+    contentType: "application/json",
+    success: function(datos){ // Se ejecuta cuando la peticion sea exitosa
+        
+        arreglo_json.push(datos);
+       
+        console.log(arreglo_json);
+        refrescar();
+    }
+
+    });
+
+    
+}
+
+function cargar_tipos() {
+    $.ajax({
+        url: "http://127.0.0.1:8000/tipo/",
+        type: "GET",
+
+        success: function(datos) {
+            const select = $("#actividad");
+
+            // Limpiar las opciones actuales
+            select.empty();
+
+            // Opción inicial
+            select.append(
+                '<option value="">-- Opciones --</option>'
+            );
+
+            // Pintar los datos de la API
+            datos.forEach(function(tipo) {
+                select.append(
+                    `<option value="${tipo.id}">${tipo.nombre}</option>`
+                );
+            });
+        },
+
+        error: function(error) {
+            console.log("Error al obtener los tipos:", error);
+        }
+    });
+}
+
+function actualizar_tarea(id){
+
+    const tarea = {
+        description: $("#text_agre").val(),
+        foreig_id: Number($("#actividad").val()),
+        prioridad: $("#prioridad").val()
+    };
+
+    $.ajax({
+        url: "http://127.0.0.1:8000/tarea/" + id,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(tarea),
+        success: function(datos){ // Se ejecuta cuando la peticion sea exitosa
+        
+            arreglo_json.push(datos);
+            console.log(arreglo_json);
+            refrescar();
+        }
+
+    });
+}
