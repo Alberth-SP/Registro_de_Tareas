@@ -7,33 +7,18 @@ $(document).ready(function(){
 
     cargar_tipos();
     ideRecup = $("#hidText").val();
-    console.log("bbbbbbbbbbb");
-    console.log(ideRecup);
-    console.log("bbbbbbbbbbb");
-    //ideRecup = null; //recupero id
     
     $("#agregar").click(function(){  
         if( ideRecup == "" ){
-            console.log("55555555555555555");
-            console.log(ideRecup);
-            console.log("555555555555555555");
             post_agregar();
             $("#text_agre").val(" ");
-            localStorage.setItem("mensajeArr", JSON.stringify(arreglo_json));
-            console.log("-----------------------");
-            console.log(ideRecup);
-            console.log("-----------------------");
         }
         
         else if ( ideRecup != "" ){
-            console.log("44444444444444444444");
-            console.log(ideRecup);
-            console.log("44444444444444444444");
+
             actualizar_tarea(ideRecup);
-            
             var id = ideRecup;
             $("#text_agre").val(" ");
-            localStorage.setItem("mensajeArr", JSON.stringify(arreglo_json));
             $("#hidText").val("");
             $("#agregar").text("Agregar Tarea");
             $("#caja" + id).css("background-color", "#a7e5f1");
@@ -46,36 +31,22 @@ $(document).ready(function(){
    
     });
 
-   
-    arreglo = JSON.parse(localStorage.getItem("mensajeArr")) || [];
     
-
-    if(ideRecup != ""){
-        
-        $("#caja" + ideRecup).css("background-color", "#ffff99");
-        $(".editar").prop("disabled", true);
-        $(".eliminar").prop("disabled", true);
-        $("#agregar").text("Actualizar");
-    }
-    
-   // $(".eliminar").click(function(){  // esto estaba antes
+  
    $("#items").on("click", ".eliminar", function () { // solo modifique esta linea
         
         var ides = $(this).data("id");
+        eliminar_tarea(ides);
         $("#caja" + ides).remove();
-        var filtrado = arreglo.filter(a => a.id !== ides);
-        arreglo = filtrado;
-        localStorage.setItem("mensajeArr", JSON.stringify(arreglo));
-
+        var filtrado = arreglo_json.filter(a => a.id !== ides);
+        arreglo_json = filtrado;
+        
     });
 
     $("#items").on("click", ".editar", function () { 
         
         $("#agregar").text("Actualizar");
         var ides = $(this).data("id");
-        console.log("22222222222222222222222");
-        console.log(ides);
-        console.log("22222222222222222222222");
         $("#hidText").val(ides);
         ideRecup = $("#hidText").val(); //recupero id
         
@@ -96,7 +67,6 @@ $(document).ready(function(){
 
     get_refrescar();
     
-
 });
 
 function refrescar(){
@@ -136,19 +106,30 @@ function refrescar(){
 function get_refrescar(){
     $.ajax({
 
-    url: "http://127.0.0.1:8000/tarea/",
-    type: "GET",
-    success: function(datos){
-        
-        console.log(datos);
-        datos.forEach(function(tarea){
-            arreglo_json.push(tarea);
-        });
-        refrescar();
-    }
+        url: "http://127.0.0.1:8000/tarea/",
+        type: "GET",
+        success: function(datos){
+            
+            console.log(datos);
+            datos.forEach(function(tarea){
+                arreglo_json.push(tarea);
+            });
+            refrescar();
+            actualizar_per();
+        }
     
-});
+    });
+}   
+
+function actualizar_per(){
+    if(ideRecup != ""){
+        $("#caja" + ideRecup).css("background-color", "#ffff99");
+        $(".editar").prop("disabled", true);
+        $(".eliminar").prop("disabled", true);
+        $("#agregar").text("Actualizar");
+    }
 }
+
 
 function post_agregar(){
 
@@ -167,9 +148,15 @@ function post_agregar(){
     success: function(datos){ // Se ejecuta cuando la peticion sea exitosa
         
         arreglo_json.push(datos);
-       
         console.log(arreglo_json);
         refrescar();
+    },
+    error: function(xhr, status, error) {
+        console.error("Error:", error);
+        console.error("Status:", xhr.status);
+        console.error("Respuesta:", xhr.responseText);
+        const detalle = JSON.parse(xhr.responseText);
+        alert("Ocurrio un error! "+ detalle.detail);
     }
 
     });
@@ -231,5 +218,21 @@ function actualizar_tarea(id){
             refrescar();
         }
 
+    });
+}
+function eliminar_tarea(id){
+    $.ajax({
+        url: "http://127.0.0.1:8000/tarea/" + id,
+        type: "DELETE",
+        contentType: "application/json",
+        success: function(datos){ // Se ejecuta cuando la peticion sea exitosa
+            console.log("Tarea eliminada:", datos);
+            let indice = arreglo_json.findIndex(p => p.id === id);
+            if (indice !== -1) {
+                arreglo_json.splice(indice, 1);
+            }
+            console.log(arreglo_json);
+            refrescar();
+            }
     });
 }
