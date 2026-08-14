@@ -37,10 +37,6 @@ $(document).ready(function(){
         
         var ides = $(this).data("id");
         eliminar_tarea(ides);
-        $("#caja" + ides).remove();
-        var filtrado = arreglo_json.filter(a => a.id !== ides);
-        arreglo_json = filtrado;
-        
     });
 
     $("#items").on("click", ".editar", function () { 
