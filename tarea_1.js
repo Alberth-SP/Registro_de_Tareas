@@ -1,5 +1,5 @@
 
-let arreglo = [];
+let estados = ["Pendiente","En proceso","Finalizado" ];
 let arreglo_json = [];
 var ideRecup = "";
 
@@ -61,40 +61,85 @@ $(document).ready(function(){
         
     });
 
+    $("#items").on("click", ".estado", function () { 
+        var ides = $(this).data("id");
+        for(i=0; i < arreglo_json.length; i++){
+            var men = arreglo_json[i];
+            if(men.id == ides){
+                var estadoActual = men.estado;
+            }          
+        }
+        
+        console.log("00000000000000");
+        console.log(ides);
+        console.log("00000000000000");
+        actualizar_estado(ides, estadoActual);
+        
+    });
+
     get_refrescar();
     
 });
 
 function refrescar(){
     $("#items").empty();
+    var cambEstado="";
     if(arreglo_json != null){
             for(i=0; i < arreglo_json.length; i++){
                 var men = arreglo_json[i];
+                //console.log(men);
                 let prioClass = "prioridad_"+ men.prioridad.toLowerCase();
+                cambEstado="";
+                if(men.estado == "pendiente"){
+                    cambEstado = estados[1];
+                    
+                }
+                if(men.estado == "en proceso"){
+                    cambEstado = estados[2];
+                }
+                
+                console.log("..................");
+                console.log(cambEstado);
+                console.log(".................");
+                
                 $("#items").append(`
-                    <div class="caja" id="caja${men.id}">
-                        <div class="item" id="text${men.id}">
-                                <p class="fech">Creacion: ${men.fecha_creacion}</p>
-                                <h4 class="tex">${men.description}</h4> 
-                                
-                            <div class="cont">
-                                <div class="cajita">
-                                    <span style="color: black">Tipo de Actividad:</span>
-                                    <span class="">${men.tipo.nombre}</span>
+                        <div class="caja" id="caja${men.id}">
+                            <div class="contenido">
+                                <div class="informacion">
+                                    <div class="fecha">
+                                        <span>Creación</span>
+                                        <strong>${men.fecha_creacion}</strong>
+                                    </div>
+                                    <h4 class="tex">${men.description}</h4>
+                                    <div class="datos">
+                                        <div class="dato">
+                                            <span>Tipo de actividad</span>
+                                            <strong>${men.tipo.nombre}</strong>
+                                        </div>
+                                        <div class="dato">
+                                            <span>Prioridad</span>
+                                            <strong class="prio ${prioClass}">
+                                                ${men.prioridad}
+                                            </strong>
+                                        </div>
+                                        <div class="dato">
+                                            <span>Estado</span>
+                                            <strong>${men.estado}</strong>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="cajita">
-                                    <span style="color: black">Prioridad:</span>
-                                    <span class="prio ${prioClass}">${men.prioridad}</span>
+
+                                <div class="acciones">
+                                    <button id="${men.id}" class="estado" data-id="${men.id}">Cambiar a ${cambEstado}</button>
+                                    <button class="editar" data-id="${men.id}">Editar</button>
+                                    <button class="eliminar" data-id="${men.id}">Eliminar</button>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="botones">  
-                            <button class="eliminar" data-id="${men.id}">Eliminar</button>
-                            <button class="editar" data-id="${men.id}">Editar</button>
-                        </div>
-                    </div>   
                 `);
+                if(men.estado == "finalizado"){
+                   $("#"+ men.id).hide();
+                }
             }
     }
 }
@@ -107,6 +152,7 @@ function get_refrescar(){
         success: function(datos){
             
             console.log(datos);
+            arreglo_json = [];
             datos.forEach(function(tarea){
                 arreglo_json.push(tarea);
             });
@@ -230,5 +276,38 @@ function eliminar_tarea(id){
             console.log(arreglo_json);
             refrescar();
             }
+    });
+}
+
+function actualizar_estado(id, estadoActual){
+     let siguienteEstado;
+    if (estadoActual === "pendiente") {
+        siguienteEstado = "en proceso";
+    } else if (estadoActual === "en proceso") {
+        siguienteEstado = "finalizado";
+    } else if (estadoActual === "finalizado") {
+        return; // Ya no hay siguiente estado
+    }
+    const tarea = {
+        estado: siguienteEstado
+    };
+
+    $.ajax({
+        url: "http://127.0.0.1:8000/tarea/" + id + "/estad",
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(tarea),
+        success: function(datos){ 
+            alert("Cambio de estado exitoso! ");
+            get_refrescar();
+        },
+        error: function(xhr, status, error) {
+        console.error("Error:", error);
+        console.error("Status:", xhr.status);
+        console.error("Respuesta:", xhr.responseText);
+        const detalle = JSON.parse(xhr.responseText);
+        alert("Ocurrio un error! "+ detalle.detail);
+    }
+ 
     });
 }

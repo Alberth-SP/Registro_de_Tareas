@@ -32,12 +32,9 @@
     */
 .caja{
     display: grid;
-    /*grid-template-rows: 1fr 1fr 1fr;*/
     overflow-wrap: break-word;
     word-break: break-word;
     display: flex;
-    /*justify-content: center;*/
-    /*text-align: justify;*/
     gap: 10px;
     border: 1px solid #333;
     border-radius: 10px;
@@ -89,11 +86,22 @@
    padding: 10px;
 }
 .botones{
-     /*display: flex;*/
-     margin-left: auto;
-    justify-content: flex-end; /* Envía los botones a la derecha */
+    /*
+    margin-left: auto;
+    justify-content: flex-end; /* Envía los botones a la derecha 
+    gap: 10px;*/
+
+    margin-left: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: 10px;
+    width: 200px;
+    height: 80px;
 }
+
+
+
 p{
     font-size: 10px;
 }
@@ -115,12 +123,152 @@ p{
     border-color: black;
 }
 .cont{
+    
     height: 40px;
     display: flex;
     gap: 20px;
+
+    
 }
 .cajita{
     width: 50%;
     padding: 20px;
+  
 }
 
+.estado-contenedor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    width: 200px;
+    height: 80px;
+   
+}
+
+.caja {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+
+.contenido {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 25px;
+    padding: 20px;
+}
+
+
+
+.caja {
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 12px;
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Contenedor principal */
+.contenido {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 25px;
+}
+
+/* Información */
+.informacion {
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 18px;
+    background: #fafafa;
+}
+
+.fecha {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.tex {
+    margin: 10px 0 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #d1d5db;
+    color: #1e293b;
+}
+
+/* Datos */
+.datos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.dato {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 12px;
+    background: white;
+}
+
+.dato span {
+    display: block;
+    color: #64748b;
+    font-size: 11px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.dato strong {
+    color: #1e293b;
+}
+
+/* Columna de acciones */
+.acciones {
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+
+    background: #fafafa;
+}
+
+/* Todos los botones */
+.acciones button {
+    padding: 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 2px 0;
+}
+
+/* Estado */
+.estado {
+    background: #2563eb;
+    color: white;
+    border: 1px solid #1d4ed8;
+}
+
+/* Editar */
+.editar {
+    background: #f8fafc;
+    color: #334155;
+    border: 1px solid #94a3b8;
+}
+
+/* Eliminar */
+.eliminar {
+    background: #fff1f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
