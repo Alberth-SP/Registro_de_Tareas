@@ -36,14 +36,20 @@
 
             <select id="prioridad" name="prioridad">
                 <option value="">-- Opciones --</option>
-                <option value="Alta">Alta</option>
-                <option value="Media">Media</option>
-                <option value="Baja" >Baja</option>
+                <option value="alta">Alta</option>
+                <option value="media">Media</option>
+                <option value="baja" >Baja</option>
             </select>
 
             <input type="text" id="text_agre"> 
             <input type="hidden" id="hidText" value="">
             <button id="agregar" class="control">Agregar Tarea</button>
+            
+            <select id="export" class="control" name="Descarga">
+                <option value="todo">Reporte General</option>
+                <option value="prioridad_vs_estado">Reporte prioridad vs estado</option>
+            </select>
+            <button id="descargar" >Descargar</button>
         </div> 
         <div id="items">
 

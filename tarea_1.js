@@ -70,12 +70,22 @@ $(document).ready(function(){
             }          
         }
         
-        console.log("00000000000000");
-        console.log(ides);
-        console.log("00000000000000");
         actualizar_estado(ides, estadoActual);
         
     });
+
+    $("#descargar").on("click", function () { 
+        var valor = $("#export").val();
+        if(valor == "todo"){
+            exportarExcel();
+        }
+        else if(valor == "prioridad_vs_estado"){
+            exportarExcelPrioEstado();
+        }
+
+    });
+
+
 
     get_refrescar();
     
@@ -309,5 +319,92 @@ function actualizar_estado(id, estadoActual){
         alert("Ocurrio un error! "+ detalle.detail);
     }
  
+    });
+}
+
+function exportarExcel(){
+    console.log("0000000000000000000");
+    $.ajax({
+        url: "http://127.0.0.1:8000/tarea/exportar-excel",
+        type: "GET",
+        xhrFields: {
+        responseType: "blob"
+        },
+        success: function(datos){ 
+             // Crear un Blob con el Excel recibido
+                const blob = new Blob(
+                    [datos],
+                    {
+                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    }
+                );
+
+                // Crear URL temporal
+                const url = window.URL.createObjectURL(blob);
+
+                // Crear enlace para descargar
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "tareas.xlsx";
+
+                document.body.appendChild(link);
+                link.click();
+
+                // Limpiar
+                link.remove();
+                window.URL.revokeObjectURL(url);
+
+                alert("Exportación exitosa!");
+        },
+        error: function(xhr, status, error) {
+        console.error("Error:", error);
+        console.error("Status:", xhr.status);
+        console.error("Respuesta:", xhr.responseText);
+        const detalle = JSON.parse(xhr.responseText);
+        alert("Ocurrio un error! "+ detalle.detail);
+        }
+    });
+}
+
+function exportarExcelPrioEstado(){
+    $.ajax({
+        url: "http://127.0.0.1:8000/tarea/prioridad-estado",
+        type: "GET",
+        xhrFields: {
+        responseType: "blob"
+        },
+        success: function(datos){ 
+             // Crear un Blob con el Excel recibido
+                const blob = new Blob(
+                    [datos],
+                    {
+                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    }
+                );
+
+                // Crear URL temporal
+                const url = window.URL.createObjectURL(blob);
+
+                // Crear enlace para descargar
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "tareas.xlsx";
+
+                document.body.appendChild(link);
+                link.click();
+
+                // Limpiar
+                link.remove();
+                window.URL.revokeObjectURL(url);
+
+                alert("Exportación exitosa!");
+        },
+        error: function(xhr, status, error) {
+        console.error("Error:", error);
+        console.error("Status:", xhr.status);
+        console.error("Respuesta:", xhr.responseText);
+        const detalle = JSON.parse(xhr.responseText);
+        alert("Ocurrio un error! "+ detalle.detail);
+        }
     });
 }
